@@ -210,7 +210,10 @@ class ViewTestCase(TestCase):
 
     def test_post_not_in_another_group(self):
         response = self.authorized_client.get(
-            reverse('posts:group_list', kwargs={'slug': ViewTestCase.group_game.slug})
+            reverse(
+                'posts:group_list',
+                kwargs={'slug': ViewTestCase.group_game.slug}
+            )
         )
         post_expected = ViewTestCase.posts_list.get(
             pk=ViewTestCase.post.pk
