@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Профиль - {{ author }}
+{% endblock %}
+
+{% block content %}
+	<div class="container py-3">
+
+		<div class="card mb-3">
+		  <div class="card-body">
+		    <blockquote class="blockquote mb-0">
+		      <p>Все посты пользователя: {{ author }}</p>
+		      <footer class="blockquote-footer">Всего постов: {{ count_posts }}</footer>
+
+			    {% if not is_user %}
+				    {% if following %}
+					    <a
+					      class="btn btn-lg btn-danger"
+					      href="{% url 'posts:profile_unfollow' author.username %}" role="button"
+					    >
+					      Отписаться
+					    </a>
+				    {% else %}
+					      <a
+					        class="btn btn-lg btn-success"
+					        href="{% url 'posts:profile_follow' author.username %}" role="button"
+					      >
+					        Подписаться
+					      </a>
+				    {% endif %}
+			    {% endif %}
+
+		    </blockquote>
+		  </div>
+		</div>
+
+		{% include 'includes/card.html' %}
+
+		{% include 'includes/paginator.html' %}
+  </div>
+{% endblock %}

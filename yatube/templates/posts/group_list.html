@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Записи сообщества {{ group.slug }}
+{% endblock %}
+
+{% comment %}
+	Не проходит pytest =(((
+	{% block content %}
+		<div class="container py-3">
+
+			<div class="card mb-3">
+			  <div class="card-body">
+			    <blockquote class="blockquote mb-0">
+			      <p>Название группы: {{ group.title }}</p>
+			      <p>Описание группы: {{ group.description }}</p>
+			    </blockquote>
+			  </div>
+			</div>
+
+			{% include 'includes/card.html' %}
+
+			{% include 'includes/paginator.html' %}
+		</div>
+	{% endblock %}
+
+{% endcomment %}
+
+{% block content %}
+	<div class="container">
+		<h1>{{ group.title }}</h1>
+	  <p>
+	    {{ group.description }}
+	  </p>
+		{% for post in page_obj %}
+	    <article>
+	      <ul>
+	        <li>
+	          Автор: {{ post.author.get_full_name }}
+	        </li>
+	        <li>
+	          Дата публикации: {{ post.pub_date|date:"d E Y" }}
+	        </li>
+	      </ul>
+	      <p>{{ post.text }}</p>
+	    </article>
+	    {% if not forloop.last %}<hr>{% endif %}
+		{% endfor %}
+
+		{% include 'includes/paginator.html' %}
+	</div>
+{% endblock %}

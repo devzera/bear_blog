@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Ваши подписки
+{% endblock %}
+
+{% block content %}
+	<div class="container py-3">
+
+		<div class="card mb-3">
+		  <div class="card-body">
+		    <blockquote class="blockquote mb-0">
+		      <p>Ваши подписки</p>
+		    </blockquote>
+		  </div>
+		</div>
+
+		{% include 'includes/switcher.html' %}
+		{% if posts %}
+
+			{% include 'includes/card.html' %}
+
+			{% include 'includes/paginator.html' %}
+
+		{% else %}
+
+			<h5 class="my-5">Подпишись на кого-нибудь =)</h5>
+
+		{% endif %}
+	</div>
+{% endblock %}

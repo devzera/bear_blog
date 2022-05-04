@@ -1,0 +1,28 @@
+{% load thumbnail %}
+
+{% for post in page_obj %}
+	<div class="card mb-3">
+		{% thumbnail post.image "500x100" crop="center" upscale=True as im %}
+			<img class="card-img my-2" src="{{ im.url }}">
+		{% endthumbnail %}
+	  <div class="card-body">
+	    <h5 class="card-title">Автор: {{ post.author.username }}</h5>
+	    <p class="card-text">{{ post.text }}</p>
+		  {% if not is_group_list %}
+			  {% if post.group %}
+			      <p class="card-text">{{ post.group }}</p>
+			  {% endif %}
+		  {% endif %}
+	    <p class="card-text"><small class="text-muted">Дата публикации {{ post.pub_date|date:"d E Y" }}</small></p>
+		  <a href="{% url 'posts:post_detail' post.pk %}" class="btn btn-dark">Подробно</a>
+		  {% if not is_profile %}
+		    <a href="{% url 'posts:profile' post.author.username %}" class="btn btn-dark">Все посты {{ post.author.username }}</a>
+		  {% endif %}
+		  {% if not is_group_list %}
+			  {% if post.group %}
+			      <a href="{% url 'posts:group_list' post.group.slug %}" class="btn btn-dark">Все записи группы</a>
+			  {% endif %}
+		  {% endif %}
+	  </div>
+	</div>
+{% endfor %}

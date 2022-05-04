@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	{{ post.text }}
+{% endblock %}
+
+{% block content %}
+
+  {% load thumbnail %}
+  {% load user_filters %}
+
+  <div class="container py-3">
+
+    <div class="row mb-5">
+
+      <aside class="col-12 col-md-3">
+        <div class="card" style="width: 19rem;">
+          <div class="card-header">
+            Автор: {{ post.author.username }}
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Дата публикации: {{ post.pub_date }}</li>
+            <li class="list-group-item">Группа: {{ post.group.title }}</li>
+            <li class="list-group-item">Всего постов автора:  <span >{{ count_posts }}</span></li>
+            <li class="list-group-item">
+              <a href="{% url 'posts:profile' post.author.username %}">
+                Все посты пользователя
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="{% url 'posts:group_list' post.group.slug %}">
+                Все записи группы
+              </a>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <article class="col-12 col-md-9">
+        <div class="card mb-3">
+          {% thumbnail post.image "960x339" crop="center" upscale=True as im %}
+            <img class="card-img my-2" src="{{ im.url }}">
+          {% endthumbnail %}
+          <div class="card-body">
+            <p class="card-text">{{ post.text }}</p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    {% if user.is_authenticated or comments %}
+      <div class="card">
+        <div class="card-body">
+          <blockquote class="blockquote mb-0">
+            <p>Комментарии</p>
+          </blockquote>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="row mt-3">
+
+      <div
+        {% if user.is_authenticated %}
+          class="col-12 col-md-6 mt-4"
+        {%else%}
+          class="col-12 col-md-12"
+        {%endif%}
+      >
+        {% for comment in comments %}
+          <div class="card mb-3">
+            <div class="card-header">
+               <a href="{% url 'posts:profile' comment.author.username %}">
+                  {{ comment.author.username }}
+                </a>
+            </div>
+            <div class="card-body">
+              <p class="card-text">{{ comment.text }}</p>
+              <footer class="blockquote-footer">{{ comment.created }}</footer>
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+
+      <div
+        {% if comments %}
+          class="col-12 col-md-6"
+        {%else%}
+          class="col-12 col-md-12"
+        {%endif%}
+      >
+        {% if user.is_authenticated %}
+          <div class="card my-4">
+            <h5 class="card-header">Добавить комментарий:</h5>
+            <div class="card-body">
+              <form method="post" action="{% url 'posts:add_comment' post.id %}">
+                {% csrf_token %}
+                <div class="form-group mb-2">
+                  {{ form.text|addclass:"form-control" }}
+                </div>
+                <button type="submit" class="btn btn-dark">Отправить</button>
+              </form>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% load static %}
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'posts:index' %}">
+      <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+      <span style="color:red">Ya</span>tube
+    </a>
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a
+          class="nav-link link-light {% if request.resolver_match.view_name  == 'about:author' %}bg-danger{% endif %}"
+          href="{% url 'about:author' %}">
+          Об авторе
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link-light {% if request.resolver_match.view_name  == 'about:tech' %}bg-danger{% endif %}"
+           href="{% url 'about:tech' %}">
+          Технологии
+        </a>
+      </li>
+      {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link link-light {% if request.resolver_match.view_name  == 'posts:post_create' %}bg-danger{% endif %}"
+             href="{% url 'posts:post_create' %}">
+            Новая запись
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light {% if request.resolver_match.view_name  == 'users:password_change' %}bg-danger{% endif %}"
+             href="{% url 'users:password_change' %}">
+            Изменить пароль
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light"
+             href="{% url 'users:logout' %}">
+            Выйти
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light {% if request.resolver_match.view_name  == 'posts:profile' %}bg-danger{% endif %}"
+             href="{% url 'posts:profile' request.user %}">
+            Ваш профиль: {{ request.user }}
+          </a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a class="nav-link link-light {% if request.resolver_match.view_name  == 'users:login' %}bg-danger{% endif %}"
+             href="{% url 'users:login' %}">
+            Войти
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light {% if request.resolver_match.view_name  == 'users:signup' %}bg-danger{% endif %}"
+             href="{% url 'users:signup' %}">
+            Регистрация
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
