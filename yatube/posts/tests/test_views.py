@@ -246,8 +246,8 @@ class ViewTestCase(TestCase):
 
     def test_display_comment_post(self):
         response = ViewTestCase.authorized_client.get(
-                    ViewTestCase.url['post_detail']
-                )
+            ViewTestCase.url['post_detail']
+        )
         comment = response.context['comments']
         comment_text = comment[0].text
         self.assertEqual(comment_text, 'Some text')
